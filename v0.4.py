@@ -52,8 +52,7 @@ async def on_chat_message(msg):
         await bot.sendMessage(chat_id, 'Select currency to get information about.', reply_markup=markup)
 
     elif msg['text'] == "/BTC":
-        await control_currency()
-
+        control_currency()
         await bot.sendMessage(chat_id, "BitCoin @ {}\n"
                                        "1 BTC = {:.2f} USD\n"
                                        "1 BTC = {:.2f} EUR\n"
@@ -65,9 +64,9 @@ async def on_chat_message(msg):
             float(j_obj[0]["price_eur"]),
             float(c.convert('USD', 'TRY', round(float(j_obj[0]["price_usd"]), 2))),
             comma_me(j_obj[0]["24h_volume_usd"]),
-            comma_me(j_obj[0]["percent_change_24h"])), reply_markup=hide)
+            comma_me(j_obj[0]["percent_change_24h"])))
 
-    elif msg['text'] == "/BTC":
+    elif msg['text'] == "/ETC":
         await control_currency()
 
         await bot.sendMessage(chat_id, "Etherium Classic @ {}\n"
@@ -81,7 +80,7 @@ async def on_chat_message(msg):
             float(j_obj[5]["price_eur"]),
             float(c.convert('USD', 'TRY', round(float(j_obj[5]["price_usd"]), 2))),
             comma_me(j_obj[5]["24h_volume_usd"]),
-            comma_me(j_obj[5]["percent_change_24h"])), reply_markup=hide)
+            comma_me(j_obj[5]["percent_change_24h"])))
 
     elif msg['text'] == "/XRP":
         await control_currency()
@@ -97,7 +96,7 @@ async def on_chat_message(msg):
             float(comma_me(j_obj[2]["price_eur"])),
             float(c.convert('USD', 'TRY', round(float(j_obj[2]["price_usd"]), 2))),
             comma_me(j_obj[2]["24h_volume_usd"]),
-            comma_me(j_obj[2]["percent_change_24h"])), reply_markup=hide)
+            comma_me(j_obj[2]["percent_change_24h"])))
 
     elif msg['text'] == "/ETH":
         await control_currency()
@@ -113,7 +112,7 @@ async def on_chat_message(msg):
             float(comma_me(j_obj[1]["price_eur"])),
             float(c.convert('USD', 'TRY', round(float(j_obj[1]["price_usd"]), 2))),
             comma_me(j_obj[1]["24h_volume_usd"]),
-            comma_me(j_obj[1]["percent_change_24h"])), reply_markup=hide)
+            comma_me(j_obj[1]["percent_change_24h"])))
 
     elif msg['text'] == "/LTC":
         await control_currency()
@@ -129,13 +128,11 @@ async def on_chat_message(msg):
             float(comma_me(j_obj[3]["price_eur"])),
             float(c.convert('USD', 'TRY', round(float(j_obj[3]["price_usd"]), 2))),
             comma_me(j_obj[3]["24h_volume_usd"]),
-            comma_me(j_obj[3]["percent_change_24h"])), reply_markup=hide)
+            comma_me(j_obj[3]["percent_change_24h"])))
 
     elif msg['text'] == "/DASH":
         await control_currency()
-        hide = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text='HIDE KEYBOARD', callback_data='/hidekeyboard')],
-        ])
+
         await bot.sendMessage(chat_id, "Dash @ {}\n"
                                        "1 DASH = {:.2f} USD\n"
                                        "1 DASH = {:.2f} EUR\n"
@@ -147,8 +144,7 @@ async def on_chat_message(msg):
             float(comma_me(j_obj[4]["price_eur"])),
             float(c.convert('USD', 'TRY', round(float(j_obj[4]["price_usd"]), 2))),
             comma_me(j_obj[4]["24h_volume_usd"]),
-            comma_me(j_obj[4]["percent_change_24h"])),
-                              reply_markup=hide)
+            comma_me(j_obj[4]["percent_change_24h"])))
 
     elif msg['text'] == "/XMR":
         await control_currency()
@@ -164,8 +160,7 @@ async def on_chat_message(msg):
             float(comma_me(j_obj[7]["price_eur"])),
             float(c.convert('USD', 'TRY', round(float(j_obj[7]["price_usd"]), 2))),
             comma_me(j_obj[7]["24h_volume_usd"]),
-            comma_me(j_obj[7]["percent_change_24h"])),
-                              reply_markup=hide)
+            comma_me(j_obj[7]["percent_change_24h"])))
 
     elif msg['text'] == "/about":
         await bot.sendMessage(chat_id, "To advice us:\n"
