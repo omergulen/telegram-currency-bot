@@ -9,7 +9,7 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from urllib.request import urlopen
 from forex_python.converter import CurrencyRates
 from datetime import datetime
-
+#
 logging.basicConfig(filename='logs', filemode='a', level=logging.DEBUG, format='%(asctime)s %(message)s')
 
 
