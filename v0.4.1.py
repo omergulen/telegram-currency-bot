@@ -141,8 +141,8 @@ async def on_chat_message(msg):
             datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             float(comma_me(j_obj["price_usd"])),
             float(comma_me(j_obj["price_eur"])),
-            float(c.convert('USD', 'TRY', round(float(j_obj"price_usd"]), 2))),
-            comma_me(j_obj"24h_volume_usd"]),
+            float(c.convert('USD', 'TRY', round(float(j_obj["price_usd"]), 2))),
+            comma_me(j_obj["24h_volume_usd"]),
             comma_me(j_obj["percent_change_24h"])))
 
     elif msg['text'] == "/ETH":
