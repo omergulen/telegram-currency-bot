@@ -1,0 +1,6 @@
+2017-10-24 06:35:45,521 Starting new HTTPS connection (1): api.coinmarketcap.com
+2017-10-24 06:35:47,158 https://api.coinmarketcap.com:443 "GET /v1/ticker HTTP/1.1" 301 287
+2017-10-24 06:35:47,487 https://api.coinmarketcap.com:443 "GET /v1/ticker/ HTTP/1.1" 200 None
+2017-10-24 06:37:08,077 Starting new HTTPS connection (1): api.coinmarketcap.com
+2017-10-24 06:37:09,452 https://api.coinmarketcap.com:443 "GET /v1/ticker?convert=EUR HTTP/1.1" 301 311
+2017-10-24 06:37:10,308 https://api.coinmarketcap.com:443 "GET /v1/ticker/?convert=EUR HTTP/1.1" 200 None
