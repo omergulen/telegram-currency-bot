@@ -84,6 +84,60 @@ def control_currency_dash():
     c = CurrencyRates()
 
 
+def control_currency_bch():
+    j = urlopen('https://api.coinmarketcap.com/v1/ticker/bitcoin-cash/?convert=EUR')
+    global j_obj
+    j_obj = json.load(j)
+
+    global c
+    c = CurrencyRates()
+
+
+def control_currency_xem():
+    j = urlopen('https://api.coinmarketcap.com/v1/ticker/nem/?convert=EUR')
+    global j_obj
+    j_obj = json.load(j)
+
+    global c
+    c = CurrencyRates()
+
+
+def control_currency_bcc():
+    j = urlopen('https://api.coinmarketcap.com/v1/ticker/bitconnect/?convert=EUR')
+    global j_obj
+    j_obj = json.load(j)
+
+    global c
+    c = CurrencyRates()
+
+
+def control_currency_neo():
+    j = urlopen('https://api.coinmarketcap.com/v1/ticker/neo/?convert=EUR')
+    global j_obj
+    j_obj = json.load(j)
+
+    global c
+    c = CurrencyRates()
+
+
+def control_currency_iota():
+    j = urlopen('https://api.coinmarketcap.com/v1/ticker/iota/?convert=EUR')
+    global j_obj
+    j_obj = json.load(j)
+
+    global c
+    c = CurrencyRates()
+
+
+def control_currency_omg():
+    j = urlopen('https://api.coinmarketcap.com/v1/ticker/omisego/?convert=EUR')
+    global j_obj
+    j_obj = json.load(j)
+
+    global c
+    c = CurrencyRates()
+
+
 async def on_chat_message(msg):
     global chat_id
     content_type, chat_type, chat_id = telepot.glance(msg)
@@ -100,7 +154,10 @@ async def on_chat_message(msg):
         markup = ReplyKeyboardMarkup(keyboard=[
             [KeyboardButton(text='/BTC'), KeyboardButton(text='/ETH'), KeyboardButton(text='/ETC')],
             [KeyboardButton(text='/XRP'), KeyboardButton(text='/LTC')],
-            [KeyboardButton(text='/DASH'), KeyboardButton(text='/XMR')]
+            [KeyboardButton(text='/DASH'), KeyboardButton(text='/XMR')],
+            [KeyboardButton(text='/BCH'), KeyboardButton(text='/XEM')],
+            [KeyboardButton(text='/BCC'), KeyboardButton(text='/NEO')],
+            [KeyboardButton(text='/IOTA'), KeyboardButton(text='/OMG')]
         ])
         await bot.sendMessage(chat_id, 'Select currency to get information about.', reply_markup=markup)
 
@@ -208,6 +265,102 @@ async def on_chat_message(msg):
                                        "1 XMR = {:.2f} TRY\n"
                                        "XMR-USD Volume in 24h : {} USD\n"
                                        "XMR % Changed in 24h : {} %".format(
+            datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            float(comma_me(j_obj[0]["price_usd"])),
+            float(comma_me(j_obj[0]["price_eur"])),
+            float(c.convert('USD', 'TRY', round(float(j_obj[0]["price_usd"]), 2))),
+            comma_me(j_obj[0]["24h_volume_usd"]),
+            comma_me(j_obj[0]["percent_change_24h"])))
+
+    elif msg['text'] == "/BCH":
+        control_currency_bch()
+
+        await bot.sendMessage(chat_id, "Bitcoin Cash @ {}\n"
+                                       "1 BCH = {:.2f} USD\n"
+                                       "1 BCH = {:.2f} EUR\n"
+                                       "1 BCH = {:.2f} TRY\n"
+                                       "BCH-USD Volume in 24h : {} USD\n"
+                                       "BCH % Changed in 24h : {} %".format(
+            datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            float(comma_me(j_obj[0]["price_usd"])),
+            float(comma_me(j_obj[0]["price_eur"])),
+            float(c.convert('USD', 'TRY', round(float(j_obj[0]["price_usd"]), 2))),
+            comma_me(j_obj[0]["24h_volume_usd"]),
+            comma_me(j_obj[0]["percent_change_24h"])))
+
+    elif msg['text'] == "/XEM":
+        control_currency_xem()
+
+        await bot.sendMessage(chat_id, "Nem @ {}\n"
+                                       "1 XEM = {:.2f} USD\n"
+                                       "1 XEM = {:.2f} EUR\n"
+                                       "1 XEM = {:.2f} TRY\n"
+                                       "XEM-USD Volume in 24h : {} USD\n"
+                                       "XEM % Changed in 24h : {} %".format(
+            datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            float(comma_me(j_obj[0]["price_usd"])),
+            float(comma_me(j_obj[0]["price_eur"])),
+            float(c.convert('USD', 'TRY', round(float(j_obj[0]["price_usd"]), 2))),
+            comma_me(j_obj[0]["24h_volume_usd"]),
+            comma_me(j_obj[0]["percent_change_24h"])))
+
+    elif msg['text'] == "/BCC":
+        control_currency_bcc()
+
+        await bot.sendMessage(chat_id, "BitConnect @ {}\n"
+                                       "1 BCC = {:.2f} USD\n"
+                                       "1 BCC = {:.2f} EUR\n"
+                                       "1 BCC = {:.2f} TRY\n"
+                                       "BCC-USD Volume in 24h : {} USD\n"
+                                       "BCC % Changed in 24h : {} %".format(
+            datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            float(comma_me(j_obj[0]["price_usd"])),
+            float(comma_me(j_obj[0]["price_eur"])),
+            float(c.convert('USD', 'TRY', round(float(j_obj[0]["price_usd"]), 2))),
+            comma_me(j_obj[0]["24h_volume_usd"]),
+            comma_me(j_obj[0]["percent_change_24h"])))
+
+    elif msg['text'] == "/NEO":
+        control_currency_neo()
+
+        await bot.sendMessage(chat_id, "Neo @ {}\n"
+                                       "1 NEO = {:.2f} USD\n"
+                                       "1 NEP = {:.2f} EUR\n"
+                                       "1 NEO = {:.2f} TRY\n"
+                                       "NEO-USD Volume in 24h : {} USD\n"
+                                       "NEO % Changed in 24h : {} %".format(
+            datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            float(comma_me(j_obj[0]["price_usd"])),
+            float(comma_me(j_obj[0]["price_eur"])),
+            float(c.convert('USD', 'TRY', round(float(j_obj[0]["price_usd"]), 2))),
+            comma_me(j_obj[0]["24h_volume_usd"]),
+            comma_me(j_obj[0]["percent_change_24h"])))
+
+    elif msg['text'] == "/IOTA":
+        control_currency_iota()
+
+        await bot.sendMessage(chat_id, "Iota @ {}\n"
+                                       "1 IOTA = {:.2f} USD\n"
+                                       "1 IOTA = {:.2f} EUR\n"
+                                       "1 IOTA = {:.2f} TRY\n"
+                                       "IOTA-USD Volume in 24h : {} USD\n"
+                                       "IOTA % Changed in 24h : {} %".format(
+            datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            float(comma_me(j_obj[0]["price_usd"])),
+            float(comma_me(j_obj[0]["price_eur"])),
+            float(c.convert('USD', 'TRY', round(float(j_obj[0]["price_usd"]), 2))),
+            comma_me(j_obj[0]["24h_volume_usd"]),
+            comma_me(j_obj[0]["percent_change_24h"])))
+
+    elif msg['text'] == "/OMG":
+        control_currency_omg()
+
+        await bot.sendMessage(chat_id, "OmiseGO @ {}\n"
+                                       "1 OMG = {:.2f} USD\n"
+                                       "1 OMG = {:.2f} EUR\n"
+                                       "1 OMG = {:.2f} TRY\n"
+                                       "OMG-USD Volume in 24h : {} USD\n"
+                                       "OMG % Changed in 24h : {} %".format(
             datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             float(comma_me(j_obj[0]["price_usd"])),
             float(comma_me(j_obj[0]["price_eur"])),
