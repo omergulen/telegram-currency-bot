@@ -93,7 +93,18 @@ async def on_chat_message(msg):
     if text == '/START':
         await bot.sendMessage(chat_id,"Type currency name.\n")
 
-    elif text in CURRENCIES:
+    elif text == '/ABOUT':
+        advice_msg = ('To advice us:\n'
+                      'https://github.com/omergulen/telegram-currency-bot\n'
+                      'or\n'
+                      'omrglen@gmail.com\n'
+                      'Thanks for support!')
+        await bot.sendMessage(chat_id, advice_msg)
+        await bot.sendMessage(chat_id, 'Type a currency name to get information about it.')
+
+    command, text = text.split()
+
+    if command == "/P" and text in CURRENCIES:
         currency = CURRENCIES[text[:]]
         response = ('{name} @ {date}\n'
                     '1 {symbol} = {price_btc:.8f} BTC\n'
@@ -112,15 +123,6 @@ async def on_chat_message(msg):
                         )
         await bot.sendMessage(chat_id, response)
 
-    elif text == '/ABOUT':
-        advice_msg = ('To advice us:\n'
-                      'https://github.com/omergulen/telegram-currency-bot\n'
-                      'or\n'
-                      'omrglen@gmail.com\n'
-                      'Thanks for support!')
-        await bot.sendMessage(chat_id, advice_msg)
-        await bot.sendMessage(chat_id, 'Type a currency name to get information about it.')
-
     else:
         await bot.sendMessage(
             chat_id,
@@ -130,7 +132,7 @@ async def on_chat_message(msg):
 
 
 if __name__ == '__main__':
-    TOKEN =  "**********************************************"
+    TOKEN =  "*******************************************"
 
     CURRENCIES = {
         currency.symbol: currency
