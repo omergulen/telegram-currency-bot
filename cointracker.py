@@ -105,8 +105,6 @@ async def on_chat_message(msg):
         await bot.sendMessage(chat_id, 'Type a currency name to get information about it.')
 
     elif text == '/CHECK':
-
-
         for i in userCoins:
             for j in userCoins.values():
                 for k in j:
@@ -124,8 +122,6 @@ async def on_chat_message(msg):
 
     sats = float("0."+ "0"*(8-len(sats))+sats)
 
-
-
     if command == '/TRACK' and text[:-1] in CURRENCIES:
         if chat_id in userCoins:
             userCoins[chat_id].update({text: sats})
@@ -133,32 +129,10 @@ async def on_chat_message(msg):
             userCoins.update({chat_id:{text: sats}})
         print(userCoins)
 
-    elif command == '/REMOVE' and text in userCoins[username]:
-        userCoins[username].pop(text)
+    elif command == '/REMOVE' and text[:-1] in userCoins[username]:
+        message = userCoins[username].pop(text)
+        await bot.sendMessage(str(i), message)
         print(userCoins)
-
-
-
-    # elif text in CURRENCIES:
-    #     currency = CURRENCIES[text[:]]
-    #     response = ('{name} @ {date}\n'
-    #                 '1 {symbol} = {price_btc:.8f} BTC\n'
-    #                 '1 {symbol} = {price_usd:.2f} USD\n'
-    #                 '1 {symbol} = {price_try:.2f} TRY\n'
-    #                 '{symbol}-USD Volume in 24h: {usd_volume} USD\n'
-    #                 '{symbol} % Changed in 24h: {percent_change} %').format(
-    #                     name=currency.name,
-    #                     date=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-    #                     symbol=currency.symbol,
-    #                     price_btc=float(currency.price_btc),
-    #                     price_usd=float(currency.price_usd),
-    #                     price_try=float(currency.price_try),
-    #                     usd_volume=getattr(currency, '24h_volume_usd'),
-    #                     percent_change=currency.percent_change_24h
-    #                     )
-    #     await bot.sendMessage(chat_id, response)
-
-
 
     else:
         await bot.sendMessage(
@@ -168,12 +142,8 @@ async def on_chat_message(msg):
             )
 
 
-
-
-
-
 if __name__ == '__main__':
-    TOKEN =  "***************************************"
+    TOKEN =  "*********************************"
 
     CURRENCIES = {
         currency.symbol: currency
