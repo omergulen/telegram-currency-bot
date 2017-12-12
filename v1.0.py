@@ -3,14 +3,11 @@
 
 
 import asyncio
-import json
 import logging
 import re
 import requests
 import telepot
 import telepot.aio
-from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
-from telepot.namedtuple import ReplyKeyboardRemove
 from datetime import datetime
 
 
@@ -34,7 +31,7 @@ def comma_me(amount):
         return comma_me(new)
 
 
-def get_from_api(url=API_URL, convert='EUR', limit=None):
+def get_from_api(url=API_URL, convert='TRY', limit=None):
     """Getting infos from API using requests"""
     params = {'convert': convert}
     if limit:
@@ -57,18 +54,6 @@ class Currency(object):
     def __repr__(self):
         return '<Currency {}>'.format(self.symbol)
 
-    def get_infos(self, conversion=None):
-        if not conversion:
-            result = get_from_api('{url}/{id}'.format(url=API_URL, id=self.id))
-        else:
-            result = get_from_api(
-                '{url}/{id}'.format(url=API_URL, id=self.id),
-                convert=conversion
-                )
-        infos = result.pop()
-        for key, value in infos.items():
-            setattr(self, key, value)  # each key is now an attr of class
-
     @staticmethod
     def all():
         """Returns a dict where keys are currencies' symbols
@@ -78,7 +63,7 @@ class Currency(object):
         for infos in result:
             currency = Currency(infos['symbol'], infos['id'])
             for key, value in infos.items():
-                if key not in ['symbol', 'id']:
+                if key not in ['symbol']:
                     setattr(currency, key, value)
             response.append(currency)
         return response
@@ -89,7 +74,7 @@ async def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
     date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     username = msg['from']['username']
-    text = msg['text']
+    text = msg['text'].upper()
     log = ('Chat: {content_type} '
            '{chat_type} {chat_id} '
            '{username} {text}').format(
@@ -105,58 +90,47 @@ async def on_chat_message(msg):
     if content_type != 'text':
         return
 
-    if text == '/start':
-        markup = ReplyKeyboardMarkup(
-            keyboard=[
-                KeyBoarButton(text='/{}'.format(currency))
-                for currency in CURRENCIES
-                ]
-            )
-        await bot.sendMessage(
-            chat_id,
-            'Select currency to get information about.',
-            reply_markup=markup
-            )
+    if text == '/START':
+        await bot.sendMessage(chat_id,"Type currency name.\n")
 
     elif text in CURRENCIES:
-        currency = CURRENCIES[text[1:]]
-        currency = currency.get_infos('TRY')
+        currency = CURRENCIES[text[:]]
         response = ('{name} @ {date}\n'
+                    '1 {symbol} = {price_btc:.8f} BTC\n'
                     '1 {symbol} = {price_usd:.2f} USD\n'
-                    '1 {symbol} = {price_eur:.2f} EUR\n'
                     '1 {symbol} = {price_try:.2f} TRY\n'
                     '{symbol}-USD Volume in 24h: {usd_volume} USD\n'
                     '{symbol} % Changed in 24h: {percent_change} %').format(
                         name=currency.name,
                         date=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                         symbol=currency.symbol,
+                        price_btc=float(currency.price_btc),
                         price_usd=float(currency.price_usd),
-                        price_eur=float(currency.price_eur),
                         price_try=float(currency.price_try),
                         usd_volume=getattr(currency, '24h_volume_usd'),
-                        percentage_change=currency.percent_change_24h
+                        percent_change=currency.percent_change_24h
                         )
         await bot.sendMessage(chat_id, response)
 
-    elif text == '/about':
+    elif text == '/ABOUT':
         advice_msg = ('To advice us:\n'
                       'https://github.com/omergulen/telegram-currency-bot\n'
                       'or\n'
                       'omrglen@gmail.com\n'
                       'Thanks for support!')
         await bot.sendMessage(chat_id, advice_msg)
-        await bot.sendMessage(chat_id, '/start to re-open keyboard')
+        await bot.sendMessage(chat_id, 'Type a currency name to get information about it.')
 
     else:
         await bot.sendMessage(
             chat_id,
-            ('/start to re-open keyboard\n'
+            ('Type a currency name!\n'
              '/about to advice us :)')
             )
 
 
 if __name__ == '__main__':
-    TOKEN =  "**************************************"
+    TOKEN =  "**********************************************"
 
     CURRENCIES = {
         currency.symbol: currency
