@@ -87,6 +87,11 @@ async def on_chat_message(msg):
     print(date, log)
     logging.info(log)
 
+    CURRENCIES = {
+        currency.symbol: currency
+        for currency in Currency.all()
+    }
+
     if content_type != 'text':
         return
 
@@ -105,6 +110,7 @@ async def on_chat_message(msg):
     command, text = text.split()
 
     if command == "/P" and text in CURRENCIES:
+
         currency = CURRENCIES[text[:]]
         response = ('{name} @ {date}\n'
                     '1 {symbol} = {price_btc:.8f} BTC\n'
@@ -123,16 +129,9 @@ async def on_chat_message(msg):
                         )
         await bot.sendMessage(chat_id, response)
 
-    else:
-        await bot.sendMessage(
-            chat_id,
-            ('Type a currency name!\n'
-             '/about to advice us :)')
-            )
-
 
 if __name__ == '__main__':
-    TOKEN =  "*******************************************"
+    TOKEN =  "********************************************"
 
     CURRENCIES = {
         currency.symbol: currency
