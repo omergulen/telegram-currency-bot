@@ -73,17 +73,31 @@ async def on_chat_message(msg):
     global chat_id
     content_type, chat_type, chat_id = telepot.glance(msg)
     date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    username = msg['from']['username']
+
     text = msg['text'].upper()
-    log = ('Chat: {content_type} '
-           '{chat_type} {chat_id} '
-           '{username} {text}').format(
-               content_type=content_type,
-               chat_type=chat_type,
-               chat_id=chat_id,
-               username=username,
-               text=text
-               )
+
+    try:
+        username = msg['from']['username']
+        log = ('Chat: {content_type} '
+               '{chat_type} {chat_id} '
+               '{username} {text}').format(
+            content_type=content_type,
+            chat_type=chat_type,
+            chat_id=chat_id,
+            username=username,
+            text=text
+        )
+    except:
+        log = ('Chat: {content_type} '
+               '{chat_type} {chat_id} '
+               '{username} {text}').format(
+            content_type=content_type,
+            chat_type=chat_type,
+            chat_id=chat_id,
+            username="no username",
+            text=text
+        )
+
     print(date, log)
     logging.info(log)
 
@@ -98,7 +112,7 @@ async def on_chat_message(msg):
     if text == '/START':
         await bot.sendMessage(chat_id,"Type currency name.\n")
 
-    elif text == '/ABOUT':
+    elif text == '/ABOUT' or text == '/ABOUT@CCRYPTBOT':
         advice_msg = ('To advice us:\n'
                       'https://github.com/omergulen/telegram-currency-bot\n'
                       'or\n'
@@ -110,29 +124,53 @@ async def on_chat_message(msg):
     command, text = text.split()
 
     if command == "/P" and text in CURRENCIES:
-        a = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
         currency = CURRENCIES[text[:]]
-        response = ('{name} : {date}\n'
-                    '1 {symbol} = {price_btc:.8f} BTC\n'
-                    '1 {symbol} = {price_usd:.2f} USD\n'
-                    '1 {symbol} = {price_try:.2f} TRY\n'
-                    '{symbol}-USD Vol. 24h: {usd_volume} USD\n'
-                    '{symbol} % Change 24h: {percent_change}%').format(
-                        name=currency.name,
-                        date=a[:-8] + str(int(a[-8:-6]) + 3) + a[-6:],
-                        symbol=currency.symbol,
-                        price_btc=float(currency.price_btc),
-                        price_usd=float(currency.price_usd),
-                        price_try=float(currency.price_try),
-                        usd_volume=comma_me(getattr(currency,'24h_volume_usd')),
-                        percent_change=currency.percent_change_24h
-                        )
+
+        a = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        b = currency.percent_change_24h
+
+
+        if float(b) > 0:
+            b = " 🚀"
+        elif float(b) < 0:
+            b = " 🔻"
+        else:
+            b = ""
+        if currency.symbol != 'BTC':
+            response = ('{name} : {date}\n'
+                        '= {price_btc:.8f} BTC\n'
+                        '= {price_usd:.2f} USD\n'
+                        '= {price_try:.2f} TRY\n'
+                        '{symbol}-USD Vol. 24h: {usd_volume} USD\n'
+                        '{symbol} % Change 24h: {percent_change}% ' + b).format(
+                            name=currency.name,
+                            date=a[:-8] + str(int(a[-8:-6]) + 3) + a[-6:],
+                            symbol=currency.symbol,
+                            price_btc=float(currency.price_btc),
+                            price_usd=float(currency.price_usd),
+                            price_try=float(currency.price_try),
+                            usd_volume=comma_me(getattr(currency,'24h_volume_usd')),
+                            percent_change=currency.percent_change_24h
+                            )
+        else:
+            response = ('{name} : {date}\n'
+                        '= {price_usd:.2f} USD\n'
+                        '= {price_try:.2f} TRY\n'
+                        '{symbol}-USD Vol. 24h: {usd_volume} USD\n'
+                        '{symbol} % Change 24h: {percent_change}% ' + b).format(
+                name=currency.name,
+                date=a[:-8] + str(int(a[-8:-6]) + 3) + a[-6:],
+                symbol=currency.symbol,
+                price_usd=float(currency.price_usd),
+                price_try=float(currency.price_try),
+                usd_volume=comma_me(getattr(currency, '24h_volume_usd')),
+                percent_change=currency.percent_change_24h
+            )
         await bot.sendMessage(chat_id, response)
 
 
 if __name__ == '__main__':
-    TOKEN =  "************************************U"
+    TOKEN =  "***************************************"
 
     CURRENCIES = {
         currency.symbol: currency
