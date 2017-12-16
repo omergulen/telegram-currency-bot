@@ -130,12 +130,15 @@ async def on_chat_message(msg):
         b = currency.percent_change_24h
 
 
-        if float(b) > 0:
+        if float(b) >= 20:
             b = " 🚀"
+        elif float(b) > 0:
+            b = " 🔺"
         elif float(b) < 0:
             b = " 🔻"
         else:
             b = ""
+            
         if currency.symbol != 'BTC':
             response = ('{name} : {date}\n'
                         '= {price_btc:.8f} BTC\n'
@@ -170,7 +173,7 @@ async def on_chat_message(msg):
 
 
 if __name__ == '__main__':
-    TOKEN =  "***************************************"
+    TOKEN =  "******************************************"
 
     CURRENCIES = {
         currency.symbol: currency
